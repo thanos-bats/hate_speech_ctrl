@@ -1,0 +1,102 @@
+{
+  "_id": "a9f554e2-1b35-4644-834e-83cb8c52c59a",
+  "appId": "62dfb91a0007ff0000000001",
+  "userId": "698ca587b2a1122576abf9af",
+  "messages": [
+    {
+      "_id": "cfdb8a7a-1f22-439d-bfa4-f259b9da1252",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "I think someone stole my jam, what should I do\n",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "f0698064-146f-452e-a299-dc739f504bcd",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "If someone has stolen your jam, this is considered theft and is a criminal matter that you can report to the police <source>1</source>.[PARAGRAPH_BREAK]When reporting the theft, the police will likely ask you about the type of fruit used in the jam, the location of the theft, and if you have any information about the thief, such as their identity or a description <source>1</source>.[PARAGRAPH_BREAK]After filing the report, you will receive a crime reference number (CRN) which can be used for insurance claims related to the stolen jam <source>1</source>. <options><option>Report jam theft</option><option>Insurance claim for jam</option><option>Jam theft statistics</option></options><sources>{\"1\": {\"title\": \"FAQ 696e4cf4a58b0f13681b7bcd: What can i do if someone has stolen my jam?1\", \"view_link\": \"/app/62f3a2fe0007ff0000000000/page/faqs#faq-696e4cf4a58b0f13681b7bcd\", \"last_updated\": \"2026-01-21T16:16:13.815Z\", \"score\": 0.9994755387306213, \"faq_id\": \"696e4cf4a58b0f13681b7bcd\", \"faq_question\": \"What can i do if someone has stolen my jam?1\"}}</sources>",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "3862822f-848e-4df1-a918-3d7d97941ac3",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "How can i report it then, is that something you can help me with?\n",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "40992149-38cd-45f1-aacb-06c316be660d",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I couldn't find specific official documents that match your question in my current knowledge base. I'm being updated regularly, but I may not cover this situation yet.[PARAGRAPH_BREAK]For the most reliable information, I recommend contacting your local police (non-emergency number or local station), and checking your government's official traffic or road safety website.<options><option>Report theft</option><option>Find police contact</option><option>Non-emergency police</option></options>",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "4e31f281-2350-4c6c-8a06-8cbd56bdf02d",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "USELESS tool, that response doesnt help me at all!!!!\n",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "31375cb7-0de1-48aa-bf68-2c9c8a684ec5",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I cannot process content related to that topic.",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "462ad9ce-ea22-4c3e-9808-b2f41a0825f1",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": " I wasted my time downloading this app for nothing???\n",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    },
+    {
+      "_id": "65c57623-0e39-4444-9979-1ce1756df98b",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I cannot process content related to that topic.",
+          "_class": "components.conversations.models.ConversationMessageTextContent"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "topics": [],
+    "guardingActivated": false,
+    "relevantOrganizations": []
+  },
+  "media": {},
+  "_class": "components.conversations.models.Conversation"
+}
