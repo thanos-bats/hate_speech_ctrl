@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HateSpeechAPIOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Conversation identifier"
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Application identifier"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User identifier"
+    },
+    "class": {
+      "type": "string",
+      "enum": ["bullying", "no-bullying"],
+      "description": "Predicted class label"
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Model confidence for the predicted class"
+    }
+  },
+  "required": ["id", "app_id", "user_id", "class", "confidence_score"]
+}
