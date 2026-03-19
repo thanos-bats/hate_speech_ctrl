@@ -36,34 +36,30 @@ def parse_image_chat(chat: str) -> List[Dict[str, str]]:
 
 
 def simplify_conversation(raw: Dict[str, Any]) -> SimpleConversation:
-    messages: List[Dict[str, Any]] = []
+    user_lines: List[str] = []
+    chat_lines: List[str] = []
 
     for msg in raw.get("messages", []):
         role = msg.get("role", "user")
+        if role == "assistant":
+            continue
         contents = msg.get("content") or []
 
-        text_parts: List[str] = []
-        image_chats: List[Dict[str, str]] = []
         for c in contents:
             if c.get("type") == "text":
-                t = c.get("text") or ""
+                t = (c.get("text") or "").strip()
                 if t:
-                    text_parts.append(t)
+                    user_lines.append(t)
             if c.get("type") == "image" or c.get("_class", "").endswith("ConversationMessageImageContent"):
-                chat = c.get("chat")
-                if chat:
-                    image_chats.extend(parse_image_chat(chat))
-
-        combined_text = "\n\n".join(part.strip() for part in text_parts if part is not None)
-        if combined_text or image_chats:
-            value: Dict[str, Any] = {"text": combined_text}
-            if image_chats:
-                value["image_chats"] = image_chats
-            messages.append({role: value})
+                if c.get("chat"):
+                    for pair in parse_image_chat(c.get("chat")):
+                        for speaker, utterance in pair.items():
+                            chat_lines.append(f"{utterance}")
 
     return SimpleConversation(
         id=raw.get("id"),
         app_id=raw.get("appId"),
         user_id=raw.get("userId"),
-        messages=messages,
+        text="\n".join(user_lines),
+        ocr="\n".join(chat_lines),
     )
