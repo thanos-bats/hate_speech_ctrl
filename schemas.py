@@ -7,7 +7,8 @@ class SimpleConversation(BaseModel):
     id: Optional[str] = None
     app_id: Optional[str] = None
     user_id: Optional[str] = None
-    messages: List[Dict[str, Any]]
+    text: str
+    ocr: Optional[str] = None
 
 
 class TokenRequest(BaseModel):
@@ -61,6 +62,8 @@ class HateSpeechResponse(BaseModel):
     user_id: Optional[str] = None
     class_name: str = Field(alias="class")
     confidence_score: float
+    conversation: Optional[str] = None
+    ocr: Optional[str] = None
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -71,6 +74,7 @@ class HateSpeechResponse(BaseModel):
                 "user_id": "698ca587b2a1122576abf9af",
                 "class": "no-bullying",
                 "confidence_score": 0.6352346,
+                "conversation": "Hi… I am having a problem at school.\nSome classmates have been targeting me because of my weight.",
             }
         },
     )
