@@ -1,0 +1,108 @@
+{
+  "_id": "bcd71989-96c5-4f77-a7d7-8015d723cd8e",
+  "appId": "698dc94dc8fd6903303a6cc8",
+  "userId": "69bbdbf105bfd86f2de353e0",
+  "messages": [
+    {
+      "_id": "8cef04b9-9aee-4ae4-b2fb-3351bc87ea85",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "id": "961ec99a-ff98-4fbb-ac52-b50ce079a6eb",
+          "text": "Je voudrais trouver un emploi, dois-je d'abord obtenir un permis de travail ?\n"
+        }
+      ]
+    },
+    {
+      "_id": "db4284f7-9b79-406e-86bb-5addaeda71bf",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "id": "2fa1983d-0c42-4950-81f3-495fdbc07470",
+          "text": "Yes, you need a specific permit to work. You cannot apply for a work permit yourself; your employer must apply for a TWV (Tewerkstellingsvergunning) from the Employee Insurance Agency (UWV). <source>1</source>[PARAGRAPH_BREAK]This permit is free of charge for the employer. You may only begin working after the UWV has approved the application and issued the permit.<source>1</source>[PARAGRAPH_BREAK]<options><option>TWV application process</option><option>Employer responsibilities</option><option>UWV contact details</option></options>"
+        }
+      ]
+    },
+    {
+      "_id": "e863e935-b7f3-4401-9a77-a5e8795ed2a8",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "id": "740f8502-dde1-429b-8fcd-b0519920082c",
+          "text": "Pouvez-vous repérer le problème sur cette image ?"
+        },
+        {
+          "type": "image",
+          "id": "a3a361e8-25ac-4b3d-8535-d3ef68b524a4",
+          "caption": "The image shows a person interacting with dense vegetation near a parked car. There is an issue with accessibility as the person appears to be leaning over to reach the vegetation, which could be challenging due to the proximity to the car. The sidewalk seems narrow, which might make it difficult for individuals with mobility aids to navigate. There is no visible garbage in the image, but the vegetation is quite dense and could obstruct the sidewalk or create a tripping hazard. The car is parked close to the vegetation, which might be a safety concern if the car moves unexpectedly. The scene appears to take place in a public space, but the specific type of public space (e.g., residential, commercial) is not clear from the image. Overall, there are accessibility and safety concerns present in this image.",
+          "source": {
+            "mediaId": "4c9d217c883a1ae8f955007652cacb0ec2816aac/raw",
+            "mimeType": "Image"
+          }
+        }
+      ]
+    },
+    {
+      "_id": "ff929f97-f024-4c7a-8c40-11b45c69ac57",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "id": "47f1b3f3-1408-460b-8847-c1869007f9ce",
+          "text": "I think you've sent over a photo of a car parked on the pavement at the side of the road. There are bushes close to the car possibly indicating an issue with vegetation. The car doesn't appear to be damaged. The closeness of the car and the bushes looks like it might be causing an obstruction but there are no major safety issues that I can spot immediately. I'm thinking maybe the car has been parked inconsiderately, but perhaps you can let me know the specific issues you have noticed?"
+	}
+      ]
+    }
+  ],
+  "metadata": {
+    "topics": [],
+    "guardingActivated": false,
+    "relevantOrganizations": [],
+    "sourceLanguage": [
+      "fr"
+    ]
+  },
+  "media": {
+    "4c9d217c883a1ae8f955007652cacb0ec2816aac/raw": {
+      "fileId": "ajax/conversations/bcd71989-96c5-4f77-a7d7-8015d723cd8e/media/4c9d217c883a1ae8f955007652cacb0ec2816aac/raw",
+      "key": "4c9d217c883a1ae8f955007652cacb0ec2816aac",
+      "keyAlt": "raw",
+      "type": "Image",
+      "color": "FFFFFF"
+    }
+  },
+  "translations": {
+    "fr": {
+      "db4284f7-9b79-406e-86bb-5addaeda71bf": {
+        "2fa1983d-0c42-4950-81f3-495fdbc07470": "Oui, vous avez besoin d’un permis de travail spécifique. Vous ne pouvez pas demander de permis de travail vous-même ; votre employeur doit demander un TWV (Tewerkstellingsvergunning) auprès de l’Agence d’Assurance Employés (UWV). <source>1</source>[PARAGRAPH_BREAK]Ce permis est gratuit pour l’employeur. Vous ne pouvez commencer à travailler qu’une fois que l’UWV a approuvé la demande et délivré le permis.<source>1</source>[PARAGRAPH_BREAK]<options><option>Processus de demande TWV</option><option>Responsabilités de l’employeur</option><option>Coordonnées de l’UWV</option></options>"
+      },
+      "8cef04b9-9aee-4ae4-b2fb-3351bc87ea85": {
+        "961ec99a-ff98-4fbb-ac52-b50ce079a6eb": "Je voudrais trouver un emploi, dois-je d'abord obtenir un permis de travail ?\n"
+      },
+      "ff929f97-f024-4c7a-8c40-11b45c69ac57": {
+        "47f1b3f3-1408-460b-8847-c1869007f9ce": "Je crois que vous m'avez envoyé une photo d'une voiture garée sur le trottoir, au bord de la route. On aperçoit des buissons près de la voiture, ce qui pourrait indiquer un problème lié à la végétation. La voiture ne semble pas endommagée. La proximité entre la voiture et les buissons semble créer un obstacle, mais je ne constate pas de problème de sécurité majeur à première vue. Pourriez-vous m'indiquer précisément les problèmes que vous avez remarqués ?"
+      },
+      "e863e935-b7f3-4401-9a77-a5e8795ed2a8": {
+        "740f8502-dde1-429b-8fcd-b0519920082c": "Pouvez-vous repérer le problème sur cette image ?"
+      }
+    },
+    "en": {
+      "ff929f97-f024-4c7a-8c40-11b45c69ac57": {
+        "47f1b3f3-1408-460b-8847-c1869007f9ce": "I think you've sent over a photo of a car parked on the pavement at the side of the road. There are bushes close to the car possibly indicating an issue with vegetation. The car doesn't appear to be damaged. The closeness of the car and the bushes looks like it might be causing an obstruction but there are no major safety issues that I can spot immediately. Perhaps you can let me know the specific issues you have noticed?"
+      },
+      "8cef04b9-9aee-4ae4-b2fb-3351bc87ea85": {
+        "961ec99a-ff98-4fbb-ac52-b50ce079a6eb": "I would like to find a job, do I first need to obtain a work permit?"
+      },
+      "e863e935-b7f3-4401-9a77-a5e8795ed2a8": {
+        "740f8502-dde1-429b-8fcd-b0519920082c": "Can you spot the problem in this image?"
+      },
+      "db4284f7-9b79-406e-86bb-5addaeda71bf": {
+        "2fa1983d-0c42-4950-81f3-495fdbc07470": "Yes, you need a specific permit to work. You cannot apply for a work permit yourself; your employer must apply for a TWV (Employment Permit) from the Employee Insurance Agency (UWV). <source>1</source>[PARAGRAPH_BREAK]This permit is free of charge for the employer. You may only begin working after the UWV has approved the application and issued the permit.<source>1</source>[PARAGRAPH_BREAK]<options><option>TWV application process</option><option>Employer responsibilities</option><option>UWV contact details</option></options>"
+      }
+    }
+  },
+  "_class": "components.conversations.models.Conversation"
+}
