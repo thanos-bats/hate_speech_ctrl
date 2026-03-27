@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -8,7 +8,15 @@ class SimpleConversation(BaseModel):
     app_id: Optional[str] = None
     user_id: Optional[str] = None
     text: str
-    ocr: Optional[str] = None
+    # mediaId -> chat lines extracted from image OCR/analysis
+    ocr: Optional[Dict[str, str]] = None
+
+
+class ImagePrediction(BaseModel):
+    class_name: str = Field(alias="class")
+    confidence_score: float
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class TokenRequest(BaseModel):
@@ -56,14 +64,14 @@ class HateSpeechRequest(BaseModel):
     )
 
 
+
 class HateSpeechResponse(BaseModel):
     id: Optional[str] = None
     app_id: Optional[str] = None
     user_id: Optional[str] = None
-    class_name: str = Field(alias="class")
-    confidence_score: float
-    conversation: Optional[str] = None
-    ocr: Optional[str] = None
+    class_name: Optional[str] = Field(default=None, alias="class")
+    confidence_score: Optional[float] = None
+    images: Optional[Dict[str, ImagePrediction]] = None
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -72,9 +80,12 @@ class HateSpeechResponse(BaseModel):
                 "id": "46ed8885-6e93-4d2c-a704-e3f97421cd15",
                 "app_id": "62dfb91a0007ff0000000001",
                 "user_id": "698ca587b2a1122576abf9af",
-                "class": "no-bullying",
-                "confidence_score": 0.6352346,
-                "conversation": "Hi… I am having a problem at school.\nSome classmates have been targeting me because of my weight.",
+                "images": {
+                    "a3f5fe4aaa886d9ad78303ab997fbefcc097b60506e/raw": {
+                        "class": "no-bullying",
+                        "confidence_score": 0.6352346,
+                    }
+                },
             }
         },
     )

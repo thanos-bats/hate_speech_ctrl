@@ -17,16 +17,38 @@
       "description": "User identifier"
     },
     "class": {
-      "type": "string",
-      "enum": ["bullying", "no-bullying"],
-      "description": "Predicted class label"
+      "type": ["string", "null"],
+      "enum": ["bullying", "no-bullying", null],
+      "description": "Predicted class label for the whole conversation (Dev Cycle 2 — reporting model)"
     },
     "confidence_score": {
-      "type": "number",
+      "type": ["number", "null"],
       "minimum": 0,
       "maximum": 1,
-      "description": "Model confidence for the predicted class"
+      "description": "Model confidence for the whole conversation (Dev Cycle 2 — reporting model)"
+    },
+    "images": {
+      "type": ["object", "null"],
+      "description": "Per-image prediction results keyed by image id (Dev Cycle 1 — required when present)",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "type": "string",
+            "enum": ["bullying", "no-bullying"],
+            "description": "Predicted class label"
+          },
+          "confidence_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Model confidence for the predicted class"
+          }
+        },
+        "required": ["class", "confidence_score"]
+      }
     }
   },
-  "required": ["id", "app_id", "user_id", "class", "confidence_score"]
+  "required": ["id", "app_id", "user_id"]
 }
