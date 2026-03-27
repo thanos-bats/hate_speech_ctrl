@@ -1,80 +1,103 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Tuple
 import ast
-import logging
 import requests
+import random
+
 from config import HATE_SPEECH_API_URL
-from schemas import HateSpeechResponse, SimpleConversation
+from schemas import HateSpeechResponse, ImagePrediction, SimpleConversation
 
-logger = logging.getLogger(__name__)
+# Set to True later to reactivate the reporting conversation model call.
+ENABLE_REPORTING_CONVERSATION_MODEL = False
+
+def _parse_prediction(hs_data: Dict[str, Any]) -> Tuple[str, float]:
+    prediction = (hs_data.get("prediction") or "").strip().lower()
+    probs_raw = hs_data.get("probabilities") or ""
+    probs: Dict[str, float] = {}
+
+    if isinstance(probs_raw, str) and probs_raw:
+        probs = ast.literal_eval(probs_raw)
+
+    if prediction == "bullying":
+        class_name = "bullying"
+        confidence = float(probs.get("bullying"))
+    elif prediction == "no-bullying":
+        class_name = "no-bullying"
+        confidence = float(probs.get("no-bullying"))
+    else:
+        raise RuntimeError(f"Unexpected prediction label: {prediction!r}")
+
+    if confidence is None:
+        raise RuntimeError(f"Missing confidence for prediction: {prediction!r}")
+
+    return class_name, confidence
 
 
-def run_hate_speech_model(simple: SimpleConversation) -> HateSpeechResponse:
-    payload = {
+def _call_model(api_url: str, payload: Dict[str, Any]) -> Dict[str, Any]:
+    resp = requests.post(api_url, json=payload, timeout=30)
+    resp.raise_for_status()
+    return resp.json()
+
+def run_reporting_hate_speech_model(simple: SimpleConversation) -> Tuple[str, float]:
+    """
+    "Reporting" hate-speech classification for the conversation text.
+
+    For the current phase this is intentionally disabled, and we return
+    seeded random placeholders.
+    """
+    seed = f"{simple.id or ''}:{simple.user_id or ''}:{simple.app_id or ''}"
+    conversation_payload: Dict[str, Any] = {
         "id": simple.id,
         "app_id": simple.app_id,
         "user_id": simple.user_id,
         "text": simple.text,
     }
-    print(f"[model_client] Payload to model: {payload}")
 
-    try:
-        resp = requests.post(
-            HATE_SPEECH_API_URL,
-            json=payload,
-            timeout=30,
+    if ENABLE_REPORTING_CONVERSATION_MODEL:
+        try:
+            hs_data = _call_model(HATE_SPEECH_API_URL, conversation_payload)
+            return _parse_prediction(hs_data)
+        except Exception as exc:
+            raise RuntimeError(f"Conversation hate-speech model failed: {exc}") from exc
+
+    # Placeholder output while the reporting model is inactive.
+    rng = random.Random(f"{seed}:reporting")
+    class_name = rng.choice(["bullying", "no-bullying"])
+    confidence = rng.random()
+    return class_name, confidence
+
+
+def run_hate_speech_into_images(simple: SimpleConversation) -> Dict[str, ImagePrediction]:
+    """
+    Hate-speech classification per image (OCR-derived text).
+    """
+    ocr_map: Dict[str, str] = simple.ocr or {}
+    if not ocr_map:
+        # The API layer converts ValueError -> HTTP 400 (Bad Request).
+        raise ValueError("No images found in conversation. Please provide at least one image.")
+
+    seed = f"{simple.id or ''}:{simple.user_id or ''}:{simple.app_id or ''}"
+    image_predictions: Dict[str, ImagePrediction] = {}
+
+    for media_id, ocr_text in ocr_map.items():
+        rng = random.Random(f"{seed}:ocr:{media_id}")
+        image_class = rng.choice(["bullying", "no-bullying"])
+        image_confidence = rng.random()
+
+        image_predictions[media_id] = ImagePrediction(
+            class_name=image_class,
+            confidence_score=image_confidence,
         )
-        resp.raise_for_status()
-        hs_data = resp.json()
-        logger.info("Model response received: %s", hs_data)
-        print(f"[model_client] Model response received: {hs_data}")
-    except Exception as exc:
-        logger.exception("Failed to call hate speech model API")
-        print(f"[model_client] Error calling model API: {exc!r}")
-        raise RuntimeError(f"Error calling hate speech model API: {exc}")
 
-    class_name: Optional[str] = None
-    confidence: Optional[float] = None
+    return image_predictions
 
-    try:
-        prediction = (hs_data.get("prediction") or "").strip().lower()
-        probs_raw = hs_data.get("probabilities") or ""
-        probs: Dict[str, float] = {}
-        if isinstance(probs_raw, str) and probs_raw:
-            probs = ast.literal_eval(probs_raw)
 
-        if prediction == "bullying":
-            class_name = prediction
-            confidence = float(probs.get("bullying"))
-        elif prediction == "no-bullying":
-            class_name = prediction
-            confidence = float(probs.get("no-bullying"))
-    except Exception as exc:
-        logger.exception("Failed to parse model response")
-        print(f"[model_client] Error parsing model response: {exc!r}")
-        raise RuntimeError(f"Error parsing hate speech model response: {exc}. Raw response: {hs_data}")
+def run_hate_speech_model(simple: SimpleConversation) -> HateSpeechResponse:
+    # Reporting model is deactivated — skip run_reporting_hate_speech_model().
+    images = run_hate_speech_into_images(simple)
 
-    if not class_name or confidence is None:
-        logger.error("Model response missing class/confidence: %s", hs_data)
-        print(f"[model_client] Missing class/confidence in model response: {hs_data}")
-        raise RuntimeError(f"Failed to obtain valid prediction from model. Raw response: {hs_data}")
-
-    result = HateSpeechResponse(
+    return HateSpeechResponse(
         id=simple.id,
         app_id=simple.app_id,
         user_id=simple.user_id,
-        class_name=class_name,
-        confidence_score=confidence,
-        conversation=simple.text,
-        ocr=simple.ocr,
+        images=images,
     )
-    logger.info(
-        "Parsed model result: id=%s class=%s confidence_score=%s",
-        result.id,
-        result.class_name,
-        result.confidence_score,
-    )
-    print(
-        f"[model_client] Parsed result: id={result.id} class={result.class_name} "
-        f"confidence_score={result.confidence_score}"
-    )
-    return result
