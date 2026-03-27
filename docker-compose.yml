@@ -1,0 +1,22 @@
+services:
+  hate_speech_ctrl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: iti/certh-m4d/koban/hate_speech_ctrl:1.3
+    container_name: hate_speech_ctrl
+    env_file:
+      - .env
+    environment:
+      # Internal docker DNS name; model port is not exposed to host.
+      HATE_SPEECH_API_URL: "http://koban_bullying:13333/grooming_taxonomy_both"
+    ports:
+      - "4040:4040"
+    networks:
+      - koban
+    restart: unless-stopped
+
+networks:
+  koban:
+    external: true
+    name: koban
