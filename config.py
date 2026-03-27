@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     auth_client_id: str | None = Field(default=None, validation_alias="HATE_SPEECH_AUTH_CLIENT_ID")
     auth_client_secret: str | None = Field(default=None, validation_alias="HATE_SPEECH_AUTH_CLIENT_SECRET")
     hate_speech_api_url: str | None = Field(default=None, validation_alias="HATE_SPEECH_API_URL")
+    hate_speech_ocr_api_url: str | None = Field(default=None, validation_alias="HATE_SPEECH_OCR_API_URL")
 
 
 settings = Settings()
@@ -29,3 +30,4 @@ REFRESH_TOKEN_DAYS = settings.refresh_token_days
 AUTH_CLIENT_ID = settings.auth_client_id
 AUTH_CLIENT_SECRET = settings.auth_client_secret
 HATE_SPEECH_API_URL = settings.hate_speech_api_url
+HATE_SPEECH_OCR_API_URL = settings.hate_speech_ocr_api_url or settings.hate_speech_api_url

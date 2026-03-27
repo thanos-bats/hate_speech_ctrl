@@ -27,7 +27,7 @@ def refresh_endpoint(body: TokenRefreshRequest) -> RefreshTokenResponse:
     return refresh_access_token(body)
 
 
-@app.post("/hate_speech", response_model=HateSpeechResponse)
+@app.post("/hate_speech", response_model=HateSpeechResponse, response_model_exclude_none=True)
 def hate_speech_endpoint(
     raw: HateSpeechRequest,
     _token_payload: Dict[str, Any] = Depends(verify_jwt_token),
@@ -37,6 +37,9 @@ def hate_speech_endpoint(
     simple = simplify_conversation(raw.model_dump())
     try:
         return run_hate_speech_model(simple)
+    except ValueError as exc:
+        print(f"[hate_speech_ctrl] Validation error in /hate_speech: {exc!r}")
+        raise HTTPException(status_code=400, detail=str(exc))
     except Exception as exc:
         logger.exception("Failed processing /hate_speech")
         print(f"[hate_speech_ctrl] Failed processing /hate_speech: {exc!r}")
