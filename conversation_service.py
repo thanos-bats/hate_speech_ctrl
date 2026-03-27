@@ -37,7 +37,7 @@ def parse_image_chat(chat: str) -> List[Dict[str, str]]:
 
 def simplify_conversation(raw: Dict[str, Any]) -> SimpleConversation:
     user_lines: List[str] = []
-    chat_lines: List[str] = []
+    chat_lines: Dict[str, str] = {}
 
     for msg in raw.get("messages", []):
         role = msg.get("role", "user")
@@ -52,14 +52,20 @@ def simplify_conversation(raw: Dict[str, Any]) -> SimpleConversation:
                     user_lines.append(t)
             if c.get("type") == "image" or c.get("_class", "").endswith("ConversationMessageImageContent"):
                 if c.get("chat"):
-                    for pair in parse_image_chat(c.get("chat")):
-                        for speaker, utterance in pair.items():
-                            chat_lines.append(f"{utterance}")
+                    media_id = c.get("source", {}).get("mediaId")
+                    if media_id:
+                        buf = chat_lines.get(media_id, "")
+                        for pair in parse_image_chat(c.get("chat")):
+                            for speaker, utterance in pair.items():
+                                buf += f"{utterance}\n"
+                        chat_lines[media_id] = buf.strip()
+    print(f"chat_lines: {chat_lines}")
+    print(f"user_lines: {user_lines}")
 
     return SimpleConversation(
         id=raw.get("id"),
         app_id=raw.get("appId"),
         user_id=raw.get("userId"),
         text="\n".join(user_lines),
-        ocr="\n".join(chat_lines),
+        ocr=chat_lines if chat_lines else None,
     )
