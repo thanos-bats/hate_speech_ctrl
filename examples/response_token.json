@@ -1,0 +1,6 @@
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5b3VyX2NsaWVudF9pZCIsInR5cCI6ImFjY2VzcyIsImV4cCI6MTc0MzA1MDAwMCwiaWF0IjoxNzQzMDQ4MjAwfQ...",
+    "token_type": "bearer",
+    "expires_in": 1800,
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5b3VyX2NsaWVudF9pZCIsInR5cCI6InJlZnJlc2giLCJleHAiOjE3NDM2NTMwMDAsImlhdCI6MTc0MzA0ODIwMH0..."
+}

@@ -1,0 +1,11 @@
+{
+    "id": "46ed8885-6e93-4d2c-a704-e3f97421cd15",
+    "app_id": "62dfb91a0007ff0000000001",
+    "user_id": "698ca587b2a1122576abf9af",
+    "images": {
+        "6be4aaa886d9ad78303ab997fbefcc097b60406e/raw": {
+            "class": "bullying",
+            "confidence_score": 0.4120648708214496
+        }
+    }
+}
