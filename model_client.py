@@ -1,9 +1,9 @@
 from typing import Any, Dict, Tuple
 import ast
-import requests
 import random
+import requests
 
-from config import HATE_SPEECH_API_URL
+from config import HATE_SPEECH_API_URL, HATE_SPEECH_OCR_API_URL
 from schemas import HateSpeechResponse, ImagePrediction, SimpleConversation
 
 # Set to True later to reactivate the reporting conversation model call.
@@ -17,12 +17,12 @@ def _parse_prediction(hs_data: Dict[str, Any]) -> Tuple[str, float]:
     if isinstance(probs_raw, str) and probs_raw:
         probs = ast.literal_eval(probs_raw)
 
-    if prediction == "bullying":
-        class_name = "bullying"
-        confidence = float(probs.get("bullying"))
-    elif prediction == "no-bullying":
-        class_name = "no-bullying"
-        confidence = float(probs.get("no-bullying"))
+    if prediction == "hate-speech":
+        class_name = "hate-speech"
+        confidence = float(probs.get("hate-speech"))
+    elif prediction == "no-hate-speech":
+        class_name = "no-hate-speech"
+        confidence = float(probs.get("no-hate-speech"))
     else:
         raise RuntimeError(f"Unexpected prediction label: {prediction!r}")
 
@@ -61,27 +61,39 @@ def run_reporting_hate_speech_model(simple: SimpleConversation) -> Tuple[str, fl
 
     # Placeholder output while the reporting model is inactive.
     rng = random.Random(f"{seed}:reporting")
-    class_name = rng.choice(["bullying", "no-bullying"])
+    class_name = rng.choice(["hate-speech", "no-hate-speech"])
     confidence = rng.random()
     return class_name, confidence
 
 
 def run_hate_speech_into_images(simple: SimpleConversation) -> Dict[str, ImagePrediction]:
     """
-    Hate-speech classification per image (OCR-derived text).
+    Hate-speech classification per image (OCR-extracted text).
     """
     ocr_map: Dict[str, str] = simple.ocr or {}
     if not ocr_map:
-        # The API layer converts ValueError -> HTTP 400 (Bad Request).
         raise ValueError("No images found in conversation. Please provide at least one image.")
 
-    seed = f"{simple.id or ''}:{simple.user_id or ''}:{simple.app_id or ''}"
     image_predictions: Dict[str, ImagePrediction] = {}
 
     for media_id, ocr_text in ocr_map.items():
-        rng = random.Random(f"{seed}:ocr:{media_id}")
-        image_class = rng.choice(["bullying", "no-bullying"])
-        image_confidence = rng.random()
+        ocr_payload: Dict[str, Any] = {
+            "id": simple.id,
+            "app_id": simple.app_id,
+            "user_id": simple.user_id,
+            "text": ocr_text,
+        }
+        print(f"[OCR model] Payload media_id={media_id}: {ocr_payload}")
+
+        try:
+            hs_data = _call_model(HATE_SPEECH_OCR_API_URL, ocr_payload)
+            print(f"[OCR model] Response media_id={media_id}: {hs_data}")
+            image_class, image_confidence = _parse_prediction(hs_data)
+        except Exception as exc:
+            print(f"[OCR model] Failed media_id={media_id}: {exc!r}")
+            raise RuntimeError(
+                f"OCR hate-speech model failed for media_id={media_id}: {exc}"
+            ) from exc
 
         image_predictions[media_id] = ImagePrediction(
             class_name=image_class,

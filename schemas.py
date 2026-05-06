@@ -82,7 +82,7 @@ class HateSpeechResponse(BaseModel):
                 "user_id": "698ca587b2a1122576abf9af",
                 "images": {
                     "a3f5fe4aaa886d9ad78303ab997fbefcc097b60506e/raw": {
-                        "class": "no-bullying",
+                        "class": "no-hate-speech",
                         "confidence_score": 0.6352346,
                     }
                 },
