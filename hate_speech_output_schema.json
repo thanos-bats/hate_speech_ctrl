@@ -18,7 +18,7 @@
     },
     "class": {
       "type": ["string", "null"],
-      "enum": ["bullying", "no-bullying", null],
+      "enum": ["hate-speech", "no-hate-speech", null],
       "description": "Predicted class label for the whole conversation (Dev Cycle 2 — reporting model)"
     },
     "confidence_score": {
@@ -36,7 +36,7 @@
         "properties": {
           "class": {
             "type": "string",
-            "enum": ["bullying", "no-bullying"],
+            "enum": ["hate-speech", "no-hate-speech"],
             "description": "Predicted class label"
           },
           "confidence_score": {
