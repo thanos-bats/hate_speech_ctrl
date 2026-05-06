@@ -35,30 +35,38 @@ def parse_image_chat(chat: str) -> List[Dict[str, str]]:
     return convo
 
 
+def _is_image_content(c: Dict[str, Any]) -> bool:
+    return c.get("type") == "image" or c.get("_class", "").endswith("ConversationMessageImageContent")
+
+
+def _extract_image_chat_text(chat: str) -> str:
+    utterances = [utt for pair in parse_image_chat(chat) for utt in pair.values()]
+    return "\n".join(utterances)
+
+
 def simplify_conversation(raw: Dict[str, Any]) -> SimpleConversation:
     user_lines: List[str] = []
     chat_lines: Dict[str, str] = {}
 
-    for msg in raw.get("messages", []):
-        role = msg.get("role", "user")
-        if role == "assistant":
+    messages = raw.get("messages", [])
+    for msg in messages:
+        if msg.get("role", "user") == "assistant":
             continue
-        contents = msg.get("content") or []
 
-        for c in contents:
+        for c in msg.get("content") or []:
             if c.get("type") == "text":
                 t = (c.get("text") or "").strip()
                 if t:
                     user_lines.append(t)
-            if c.get("type") == "image" or c.get("_class", "").endswith("ConversationMessageImageContent"):
-                if c.get("chat"):
-                    media_id = c.get("source", {}).get("mediaId")
-                    if media_id:
-                        buf = chat_lines.get(media_id, "")
-                        for pair in parse_image_chat(c.get("chat")):
-                            for speaker, utterance in pair.items():
-                                buf += f"{utterance}\n"
-                        chat_lines[media_id] = buf.strip()
+
+            if not _is_image_content(c) or not c.get("chat"):
+                continue
+            media_id = c.get("source", {}).get("mediaId")
+            if not media_id:
+                continue
+            existing = chat_lines.get(media_id, "")
+            new_text = _extract_image_chat_text(c["chat"])
+            chat_lines[media_id] = f"{existing}\n{new_text}".strip() if existing else new_text
     print(f"chat_lines: {chat_lines}")
     print(f"user_lines: {user_lines}")
 
