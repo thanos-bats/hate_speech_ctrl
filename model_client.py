@@ -17,12 +17,15 @@ def _parse_prediction(hs_data: Dict[str, Any]) -> Tuple[str, float]:
     if isinstance(probs_raw, str) and probs_raw:
         probs = ast.literal_eval(probs_raw)
 
-    if prediction == "hate-speech":
+    # Map των labels του bullying μοντέλου στα αναμενόμενα labels του API
+    if prediction in ["hate-speech", "bullying"]:
         class_name = "hate-speech"
-        confidence = float(probs.get("hate-speech"))
-    elif prediction == "no-hate-speech":
+        # Παίρνουμε την τιμή είτε από το key 'hate-speech' είτε από το 'bullying'
+        confidence = float(probs.get("hate-speech", probs.get("bullying", 0.0)))
+    elif prediction in ["no-hate-speech", "no-bullying"]:
         class_name = "no-hate-speech"
-        confidence = float(probs.get("no-hate-speech"))
+        # Παίρνουμε την τιμή είτε από το key 'no-hate-speech' είτε από το 'no-bullying'
+        confidence = float(probs.get("no-hate-speech", probs.get("no-bullying", 0.0)))
     else:
         raise RuntimeError(f"Unexpected prediction label: {prediction!r}")
 
@@ -33,7 +36,8 @@ def _parse_prediction(hs_data: Dict[str, Any]) -> Tuple[str, float]:
 
 
 def _call_model(api_url: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-    resp = requests.post(api_url, json=payload, timeout=30)
+    # Αυξάνουμε το timeout σε 60 δευτερόλεπτα για να μην σκάει σε cold-start
+    resp = requests.post(api_url, json=payload, timeout=60)
     resp.raise_for_status()
     return resp.json()
 
