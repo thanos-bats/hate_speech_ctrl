@@ -10,15 +10,17 @@ services:
     env_file:
       - .env
     environment:
+      # Central Keycloak on dev1: tokens are issued and verified there.
+      KEYCLOAK_URL: "https://dev1.m4d.iti.gr/koban/auth"
+      KEYCLOAK_REALM: "koban"
       # Εσωτερικό Docker DNS για το ML model
       HATE_SPEECH_API_URL: "http://koban_bullying:13333/grooming_taxonomy_both"
     ports:
       - "4040:4040"
-    networks:
-      - koban
     restart: unless-stopped
 
 networks:
-  koban:
+  # Shared with koban-keycloak, koban-webserver and the other app services.
+  default:
     external: true
     name: koban

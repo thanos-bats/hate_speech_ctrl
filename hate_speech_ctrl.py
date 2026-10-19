@@ -7,6 +7,11 @@ from conversation_service import simplify_conversation
 from model_client import run_hate_speech_model
 from schemas import HateSpeechRequest, HateSpeechResponse
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+)
+
 app = FastAPI(title="Hate Speech Detection API")
 logger = logging.getLogger(__name__)
 
