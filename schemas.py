@@ -19,28 +19,6 @@ class ImagePrediction(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
-class TokenRequest(BaseModel):
-    client_id: str
-    client_secret: str
-
-
-class TokenRefreshRequest(BaseModel):
-    refresh_token: str
-
-
-class TokenResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    expires_in: int
-    refresh_token: str
-
-
-class RefreshTokenResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    expires_in: int
-
-
 class HateSpeechRequest(BaseModel):
     model_config = ConfigDict(
         extra="allow",
